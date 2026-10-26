@@ -1,238 +1,150 @@
-# Projet de Réservation de Vol 
-1. Présentation du projet
-Ce projet consiste à développer une application Java permettant de simuler un système simple de réservation de vol.
+# Projet de réservation de vol
 
-L'application permet de créer un vol, d'enregistrer les informations d'un passager, de créer une réservation, de vérifier la disponibilité d'une place et de confirmer la réservation.
+## 1. Présentation du projet
 
-Le projet met en pratique les principaux concepts de la programmation orientée objet en Java.
+Ce projet est une application Java simple qui simule la réservation d'un
+billet d'avion. Elle permet de créer un vol, d'enregistrer un passager,
+de créer une réservation et de la confirmer lorsqu'une place est
+disponible.
 
-2. Membres du groupe et répartition du travail
-OUALBEOGO Julie
-A réalisé :
+Le projet met en pratique les notions fondamentales de la programmation
+orientée objet (POO) en Java : classes et objets, attributs privés,
+constructeurs, méthodes et collaboration entre objets.
 
-le fichier Main.java ;
+## 2. Objectifs
 
-le fichier README.md.
+L'application permet de :
 
-DIABATÉ Fatoumata
-A réalisé :
+-   créer un vol et préciser ses villes de départ et d'arrivée ;
+-   définir le prix de base et le nombre de places disponibles ;
+-   enregistrer les informations d'un passager ;
+-   créer une réservation associant un passager à un vol ;
+-   confirmer la réservation si une place est disponible ;
+-   afficher les informations du vol, du passager et du billet ;
+-   consulter le nombre de places restantes après une réservation.
 
-la partie Vol.java.
+## 3. Structure du projet
 
-ZARE Lamine
-A réalisé :
-
-la partie Passager.java ;
-
-le diagramme UML.
-
-TRAORE Houd Tariq
-A réalisé :
-
-la partie Reservation.java.
-
-Chaque membre a contribué à une partie du projet afin de réaliser l'application complète de réservation de vol.
-
-3. Objectifs du projet
-Les objectifs principaux sont :
-
-créer et gérer un vol ;
-
-enregistrer les informations d'un passager ;
-
-gérer les places disponibles ;
-
-effectuer une réservation ;
-
-confirmer une réservation lorsque le vol dispose encore de places ;
-
-afficher les informations du billet ;
-
-mettre en pratique la programmation orientée objet ;
-
-représenter la structure du système avec un diagramme UML.
-
-4. Structure du projet
+``` text
 ProjetReservationVol/
-│
-├── Passager.java
-├── Vol.java
-├── Reservation.java
-├── Main.java
-├── diagramme_UML.png
+├── src/
+│   ├── Passager.java
+│   ├── Vol.java
+│   ├── Reservation.java
+│   └── Main.java
+├── docs/
+│   └── diagramme-classes.png
 └── README.md
+```
 
-6. Description des classes
-5.1 Passager.java
-La classe Passager représente le passager qui effectue une réservation.
+> Si les fichiers Java se trouvent actuellement à la racine du dépôt,
+> vous pouvez soit les y laisser et adapter cette arborescence, soit les
+> déplacer dans `src/`. Le chemin du diagramme dans ce README suppose
+> que l'image est enregistrée dans `docs/diagramme-classes.png`.
 
-Elle contient trois attributs :
+## 4. Diagramme UML des classes
 
-nom : nom du passager ;
+Le diagramme ci-dessous présente les attributs, les constructeurs, les
+méthodes et les relations entre les trois classes du modèle. La classe
+`Reservation` référence un objet `Vol` et un objet `Passager` : elle
+utilise ces objets pour confirmer et afficher une réservation. Il n'y a
+pas de relation directe entre `Vol` et `Passager` dans le code fourni.
 
-prenom : prénom du passager ;
+![Diagramme UML des classes Vol, Passager et
+Reservation](docs/diagramme-classes.png)
 
-passeport : numéro de passeport.
+## 5. Description des classes
 
-La méthode afficherPassager() permet d'afficher les informations du passager.
+### 5.1. Classe `Passager`
 
-Exemple :
+La classe `Passager` représente une personne qui souhaite voyager.
 
-Passager : Fatoumata Diabaté (Passeport : B1234567)
-5.2 Vol.java
-La classe Vol représente un vol disponible.
+**Attributs privés :**
 
-Elle contient :
+-   `nom : String` --- nom du passager ;
+-   `prenom : String` --- prénom du passager ;
+-   `passeport : String` --- numéro de passeport.
 
-numeroVol : numéro du vol ;
+**Constructeur :**
 
-villeDepart : ville de départ ;
+-   `Passager(String nom, String prenom, String passeport)` ---
+    initialise les informations du passager.
 
-villeArrivee : ville d'arrivée ;
+**Méthode :**
 
-prixBase : prix du billet ;
+-   `afficherPassager() : void` --- affiche le prénom, le nom et le
+    numéro de passeport.
 
-placesDisponibles : nombre de places disponibles.
+### 5.2. Classe `Vol`
 
-Les principales méthodes sont :
+La classe `Vol` représente un vol proposé aux passagers.
 
-reserverPlace() : vérifie s'il reste une place et diminue le nombre de places disponibles lorsqu'une réservation est effectuée ;
+**Attributs privés :**
 
-afficherVol() : affiche les informations du vol ;
+-   `numeroVol : String` --- numéro du vol ;
+-   `villeDepart : String` --- ville de départ ;
+-   `villeArrivee : String` --- ville d'arrivée ;
+-   `prixBase : double` --- prix de base du billet, en FCFA dans
+    l'exemple ;
+-   `placesDisponibles : int` --- nombre de places encore disponibles.
 
-getPrixBase() : retourne le prix de base.
+**Constructeur :**
 
-5.3 Reservation.java
-La classe Reservation représente une réservation effectuée pour un passager sur un vol.
+-   `Vol(String numeroVol, String villeDepart, String villeArrivee, double prixBase, int placesDisponibles)`
+    --- initialise les informations du vol.
 
-Elle contient :
+**Méthodes :**
 
-numeroBillet : numéro du billet ;
+-   `reserverPlace() : boolean` --- retire une place si le nombre de
+    places disponibles est supérieur à zéro et renvoie `true`; sinon,
+    affiche un message et renvoie `false` ;
+-   `afficherVol() : void` --- affiche les informations du vol ;
+-   `getPrixBase() : double` --- renvoie le prix de base.
 
-vol : vol concerné ;
+### 5.3. Classe `Reservation`
 
-passager : passager concerné ;
-
-estConfirmee : indique si la réservation est confirmée.
-
-Les principales méthodes sont :
-
-confirmerReservation() : vérifie la disponibilité d'une place et confirme la réservation si une place est disponible ;
-
-afficherBillet() : affiche les informations du billet et son statut.
-
-5.4 Main.java
-La classe Main contient la méthode main() qui permet d'exécuter et de tester le programme.
-
-Le programme :
-
-crée un vol ;
-
-crée un passager ;
-
-affiche l'état initial du vol ;
-
-crée une réservation ;
-
-confirme la réservation ;
-
-affiche le billet ;
-
-affiche l'état du vol après la réservation.
-
-6. Fonctionnement du programme
-Le programme crée un vol avec les caractéristiques suivantes :
-
-Numéro du vol : AF720
-
-Ville de départ : Ouagadougou
-
-Ville d'arrivée : Paris
-
-Prix : 450000 FCFA
-
-Nombre de places disponibles : 2
-
-Un passager est ensuite créé avec les informations suivantes :
-
-Nom : Diabaté
-
-Prénom : Fatoumata
-
-Passeport : B1234567
-
-Une réservation portant le numéro TKT-001 est créée pour ce passager.
-
-Lors de la confirmation, la méthode reserverPlace() vérifie si une place est disponible.
-
-Comme le vol possède deux places disponibles au départ, la réservation est confirmée. Le nombre de places restantes passe alors de 2 à 1.
-
-7. Diagramme UML
-Le diagramme UML permet de représenter la structure du système et les relations entre les différentes classes.
-
-
-
-Le diagramme présente notamment :
-
-la classe Vol ;
-
-la classe Passager ;
-
-la classe Reservation ;
-
-les classes PassagerVIP et PassagerStandard ;
-
-les relations entre les classes ;
-
-les multiplicités entre les objets.
-
-Le diagramme permet ainsi de visualiser la conception générale du système de réservation de vol.
-
-Remarque
-Le diagramme UML présente une conception plus complète que les quatre classes Java actuellement fournies.
-
-Les classes effectivement implémentées dans le code sont :
-
-Passager ;
-
-Vol ;
-
-Reservation ;
-
-Main.
-
-Les classes PassagerVIP et PassagerStandard apparaissant dans le diagramme UML ne sont pas présentes dans les codes Java fournis dans cette version du projet.
-
-8. Relations entre les classes
-La classe Reservation est liée à la classe Passager et à la classe Vol.
-
-Une réservation concerne donc :
-
-un passager ;
-
+La classe `Reservation` représente une réservation pour un passager et
 un vol.
 
-Le vol contient un nombre limité de places disponibles. Lorsqu'une réservation est confirmée, une place est retirée du nombre de places disponibles.
+**Attributs privés :**
 
-9. Concepts de programmation orientée objet utilisés
-Encapsulation
-Les attributs des classes sont déclarés private. Ils sont donc protégés et ne peuvent pas être directement manipulés depuis les autres classes.
+-   `numeroBillet : String` --- numéro du billet ;
+-   `vol : Vol` --- objet représentant le vol réservé ;
+-   `passager : Passager` --- objet représentant le passager ;
+-   `estConfirmee : boolean` --- indique si la réservation est
+    confirmée.
 
-Constructeurs
-Les constructeurs permettent d'initialiser les objets lors de leur création.
+**Constructeur :**
 
-Objets
-Le programme crée plusieurs objets, notamment un objet Vol, un objet Passager et un objet Reservation.
+-   `Reservation(String numeroBillet, Vol vol, Passager passager)` ---
+    associe le billet au vol et au passager, puis initialise son état à
+    `false` (non confirmé).
 
-Association
-La classe Reservation utilise des objets Vol et Passager. Cela représente une association entre les classes.
+**Méthodes :**
 
-Héritage et abstraction dans le diagramme UML
-Le diagramme UML présente également une classe Passager pouvant être spécialisée en PassagerVIP et PassagerStandard.
+-   `confirmerReservation() : void` --- demande au vol de réserver une
+    place et confirme la réservation si l'opération réussit ;
+-   `afficherBillet() : void` --- affiche le numéro du billet, les
+    informations du passager, celles du vol et le statut de la
+    réservation.
 
-Cette partie appartient à la conception UML présentée dans le projet et n'est pas encore implémentée dans les quatre fichiers Java fournis.
+## 6. Déroulement de l'exemple
 
-10. Exemple d'exécution
+La classe `Main` exécute le scénario de démonstration suivant :
+
+1.  Création du vol `AF720`, de Ouagadougou à Paris, au prix de 450 000
+    FCFA, avec deux places disponibles.
+2.  Création du passager Fatoumata Diabaté.
+3.  Création de la réservation `TKT-001`.
+4.  Tentative de confirmation de la réservation.
+5.  Affichage du billet et du nombre de places restantes.
+
+Si la réservation est confirmée, le nombre de places disponibles passe
+de deux à une.
+
+## 7. Exemple de résultat attendu
+
+``` text
 --- État du vol ---
 Vol AF720 : Ouagadougou -> Paris | Prix : 450000.0 FCFA | Places restantes : 2
 
@@ -249,18 +161,82 @@ Statut : CONFIRMÉ
 
 --- État du vol après réservation ---
 Vol AF720 : Ouagadougou -> Paris | Prix : 450000.0 FCFA | Places restantes : 1
-11. Technologies utilisées
-Langage : Java
+```
 
-Paradigme : Programmation Orientée Objet (POO)
+La mise en forme exacte dépend des instructions d'affichage présentes
+dans la version de `Main.java` utilisée.
 
-Modélisation : UML
+## 8. Concepts de programmation utilisés
 
-Environnement de développement : Visual Studio Code, IntelliJ IDEA, Eclipse ou NetBeans
+-   **Encapsulation :** les attributs sont déclarés `private` afin de
+    limiter leur accès direct depuis les autres classes.
+-   **Constructeurs :** ils initialisent les objets au moment de leur
+    création.
+-   **Objets :** le programme crée des instances de `Vol`, `Passager` et
+    `Reservation`.
+-   **Collaboration entre objets :** `Reservation` possède des
+    références vers un `Vol` et un `Passager`, qu'elle utilise pour
+    réaliser ses opérations.
+-   **Condition :** `reserverPlace()` vérifie la disponibilité d'une
+    place avant de la retirer.
+![alt text](<Diagramme UML des réservations de vols.png>)
+## 9. Choix de conception
 
-12. Conclusion
-Ce projet permet de mettre en pratique les notions fondamentales de la programmation orientée objet à travers un système simple de réservation de vol.
+**Choix 1 --- Séparer le vol, le passager et la réservation.**\
+Chaque classe représente un concept distinct et possède une
+responsabilité identifiable. La réservation relie le passager au vol
+sans créer de relation directe entre `Vol` et `Passager`.
 
-La réalisation du projet a été répartie entre les différents membres du groupe. Chaque membre a participé à une partie du développement ou de la conception afin de construire l'application complète.
+**Choix 2 --- Garder les attributs privés.**\
+Les attributs sont déclarés `private`, ce qui applique le principe
+d'encapsulation. Dans cette première version, le prix de base peut être
+consulté avec `getPrixBase()` et la disponibilité est modifiée par
+`reserverPlace()`.
 
-Le projet permet ainsi de comprendre comment plusieurs classes Java peuvent collaborer pour représenter un système réel composé de vols, de passagers et de réservations.
+## 10. Difficulté rencontrée et amélioration possible
+
+Une difficulté consiste à maintenir la cohérence entre le nombre de
+places disponibles et le statut de la réservation. La méthode
+`confirmerReservation()` s'appuie sur le résultat de `reserverPlace()`
+pour éviter de confirmer une réservation lorsque le vol est complet.
+
+Cette première version pourrait être renforcée en vérifiant les valeurs
+reçues par les constructeurs (par exemple, un prix négatif ou un nombre
+de places négatif) et en empêchant la confirmation répétée d'une même
+réservation. Ces améliorations pourront être réalisées dans une étape
+ultérieure du projet.
+
+## 11. Membres et contributions
+
+  -----------------------------------------------------------------------
+  Membre                              Contribution
+  ----------------------------------- -----------------------------------
+  **ZARE Mouhammad Ridwane Lamine**   Développement de la classe
+                                      `Passager` et réalisation du
+                                      diagramme UML.
+
+  **DIABATE Fatoumata**               Développement de la classe `Vol`.
+
+  **TRAORE HOUD Tariq Ramadan Togo**  Développement de la classe
+                                      `Reservation`.
+
+  **OUALBEOGO Julie**                 Rédaction du `README.md` et
+                                      développement de la classe `Main`.
+  -----------------------------------------------------------------------
+
+## 12. Technologies utilisées
+
+-   **Langage :** Java 17 ;
+-   **Paradigme :** programmation orientée objet ;
+-   **Outils possibles :** IntelliJ IDEA, Eclipse, NetBeans ou Visual
+    Studio Code ;
+-   **Gestion du code :** Git et GitHub.
+
+## 13. Conclusion
+
+Ce projet propose une première simulation de réservation de billets
+d'avion. Il montre comment plusieurs classes Java peuvent collaborer :
+`Passager` représente le voyageur, `Vol` décrit le trajet et ses places
+disponibles, et `Reservation` relie le passager au vol et gère la
+confirmation. La classe `Main` permet de lancer un scénario simple et
+d'observer le résultat.
