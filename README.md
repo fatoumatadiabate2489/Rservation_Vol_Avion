@@ -50,8 +50,8 @@ méthodes et les relations entre les trois classes du modèle. La classe
 utilise ces objets pour confirmer et afficher une réservation. Il n'y a
 pas de relation directe entre `Vol` et `Passager` dans le code fourni.
 
-![Diagramme UML des classes Vol, Passager et
-Reservation](docs/diagramme-classes.png)
+![Uploading Diagramme UML des réservations de vols.png…]()
+
 
 ## 5. Description des classes
 
@@ -179,8 +179,7 @@ dans la version de `Main.java` utilisée.
     réaliser ses opérations.
 -   **Condition :** `reserverPlace()` vérifie la disponibilité d'une
     place avant de la retirer.
-![alt text](<Diagramme UML des réservations de vols.png>)
-## 9. Choix de conception
+       ## 9. Choix de conception
 
 **Choix 1 --- Séparer le vol, le passager et la réservation.**\
 Chaque classe représente un concept distinct et possède une
