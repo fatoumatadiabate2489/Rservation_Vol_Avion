@@ -1,8 +1,8 @@
 public class Reservation {
-    protected String numeroBillet;
-    protected Vol vol;
-    protected Passager passager;
-    protected boolean estConfirmee;
+    private String numeroBillet;
+    private Vol vol;
+    private Passager passager;
+    private boolean estConfirmee;
 
     public Reservation(String numeroBillet, Vol vol, Passager passager) {
         this.numeroBillet = numeroBillet;
