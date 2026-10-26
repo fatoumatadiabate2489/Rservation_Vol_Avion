@@ -50,7 +50,7 @@ méthodes et les relations entre les trois classes du modèle. La classe
 utilise ces objets pour confirmer et afficher une réservation. Il n'y a
 pas de relation directe entre `Vol` et `Passager` dans le code fourni.
 
-![Uploading diagramme-classes.png…]()
+
 
 
 
