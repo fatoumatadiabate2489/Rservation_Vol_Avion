@@ -1,7 +1,7 @@
 public class Passager {
-    protected String nom;
-    protected String prenom;
-    protected String passeport;
+    private String nom;
+    private String prenom;
+    private String passeport;
 
     public Passager(String nom, String prenom, String passeport) {
         this.nom = nom;
