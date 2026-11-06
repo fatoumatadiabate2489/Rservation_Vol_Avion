@@ -1,242 +1,125 @@
-# Projet de réservation de vol
+## Système de réservation de vols
 
-## 1. Présentation du projet
+Application Java console modélisant la réservation de billets d'avion. Le projet met en œuvre les principes de la programmation orientée objet : héritage, abstraction, polymorphisme, encapsulation et composition.
 
-Ce projet est une application Java simple qui simule la réservation d'un
-billet d'avion. Elle permet de créer un vol, d'enregistrer un passager,
-de créer une réservation et de la confirmer lorsqu'une place est
-disponible.
+## Table des matières
 
-Le projet met en pratique les notions fondamentales de la programmation
-orientée objet (POO) en Java : classes et objets, attributs privés,
-constructeurs, méthodes et collaboration entre objets.
+1.	Présentation
+2.	Concepts de POO illustrés
+3.	Structure du projet
+4.	Description des classes
+5.	Compilation et exécution
+6.	Jeu de tests
+7.	Limites connues et évolutions possibles
+   
+## Présentation
+Le système permet de :
+•	définir des vols (trajet, prix de base, nombre de places disponibles) ;
+•	gérer deux catégories de passagers (standard et VIP) ;
+•	calculer le prix d'un billet selon la catégorie du passager ;
+•	créer et confirmer des réservations, avec gestion de la disponibilité des places ;
+•	afficher un billet récapitulatif.
+Les prix sont exprimés en francs CFA (FCFA).
 
-## 2. Objectifs
+## Concepts de POO illustrés
+•	Abstraction : Passager est une classe abstraite qui déclare la méthode calculerReduction.
+•	Héritage : PassagerStandard et PassagerVIP étendent Passager.
+•	Polymorphisme : calculerReduction produit un résultat différent selon le type de passager.
+•	Encapsulation : les attributs sont private ou protected et accessibles par des accesseurs.
+•	Composition : une Reservation associe un Vol et un Passager.
 
-L'application permet de :
+## Structure du projet
+.
+├── Passager.java           Classe abstraite (nom, prénom, passeport)
+├── PassagerStandard.java   Passager sans réduction
+├── PassagerVIP.java        Passager avec taux de réduction
+├── Vol.java                Vol (trajet, prix de base, places)
+├── Reservation.java        Réservation liant un vol et un passager
+└── Main.java               Programme principal et tests manuels
 
--   créer un vol et préciser ses villes de départ et d'arrivée ;
--   définir le prix de base et le nombre de places disponibles ;
--   enregistrer les informations d'un passager ;
--   créer une réservation associant un passager à un vol ;
--   confirmer la réservation si une place est disponible ;
--   afficher les informations du vol, du passager et du billet ;
--   consulter le nombre de places restantes après une réservation.
+## Description des classes
 
-## 3. Structure du projet
+Passager (classe abstraite)
+Classe de base représentant un passager.
+•	Attributs protégés : nom, prenom, passeport.
+•	Accesseurs : getNom(), getPrenom(), getPasseport().
+•	afficherPassager() : affiche l'identité et le numéro de passeport.
+•	calculerReduction(double prixBase) : méthode abstraite retournant le prix final, implémentée par les sous-classes.
+Le constructeur signale par un message console un nom ou un prénom vide.
 
-``` text
-ProjetReservationVol/
-├── src/
-│   ├── Passager.java
-│   ├── Vol.java
-│   ├── Reservation.java
-│   └── Main.java
-├── docs/
-│   └── diagramme-classes.png
-└── README.md
-```
+PassagerStandard
+Passager sans avantage tarifaire. La méthode calculerReduction retourne le prix de base inchangé.
 
-> Si les fichiers Java se trouvent actuellement à la racine du dépôt,
-> vous pouvez soit les y laisser et adapter cette arborescence, soit les
-> déplacer dans `src/`. Le chemin du diagramme dans ce README suppose
-> que l'image est enregistrée dans `docs/diagramme-classes.png`.
+PassagerVIP
+Passager bénéficiant d'un taux de réduction fourni à la construction (par exemple 0.20 pour 20 %).
+Prix final : prixBase × (1 − reduction)
+Vol
 
-## 4. Diagramme UML des classes
+## Représente un vol et la disponibilité de ses places.
+•	Attributs : numeroVol, villeDepart, villeArrivee, prixBase, placesDisponibles.
+•	reserverPlace() : décrémente le nombre de places et retourne true ; retourne false si le vol est complet.
+•	afficherVol() : affiche le trajet, le prix et le nombre de places restantes.
+•	Accesseurs : getNumeroVol(), getVilleDepart(), getVilleArrivee(), getPrixBase(), getPlacesDisponibles().
+Le constructeur contrôle que le numéro de vol n'est pas vide, que le prix est strictement positif et que le nombre de places n'est pas négatif.
 
-Le diagramme ci-dessous présente les attributs, les constructeurs, les
-méthodes et les relations entre les trois classes du modèle. La classe
-`Reservation` référence un objet `Vol` et un objet `Passager` : elle
-utilise ces objets pour confirmer et afficher une réservation. Il n'y a
-pas de relation directe entre `Vol` et `Passager` dans le code fourni.
+## Reservation
+Associe un vol et un passager sous un numéro de billet.
+•	Attributs : numeroBillet, vol, passager, estConfirmee (faux à la création).
+•	confirmerReservation() : réserve une place sur le vol et met à jour l'état en cas de succès.
+•	afficherBillet() : affiche le billet avec le statut CONFIRMÉ ou EN ATTENTE.
+•	Accesseurs : getNumeroBillet(), getVol(), getPassager(), isEstConfirmee().
 
-https://github.com/fatoumatadiabate2489/Rservation_Vol_Avion/blob/main/Diagramme%20UML%20des%20réservations%20de%20vols.png
+## Main
+Point d'entrée de l'application. Exécute la série de tests décrite ci-dessous et affiche le bilan.
+Compilation et exécution
+Prérequis : Java Development Kit (JDK) 8 ou version ultérieure.
+Compilation :
+bash
+javac *.java
+Exécution :
+bash
+java Main
+
+## Jeu de tests
+La classe Main exécute huit tests manuels :
+1.	Création d'un vol : l'objet est créé.
+2.	Création d'un passager standard : le nom correspond à la valeur fournie.
+3.	Création d'un passager VIP : l'objet est créé.
+4.	Polymorphisme : le prix standard est de 300 000 et le prix VIP de 240 000.
+5.	Composition : la réservation est correctement liée au vol et au passager.
+6.	Confirmation d'une réservation : le statut passe à confirmé.
+7.	Affichage du billet : le billet est affiché (vérification visuelle).
+8.	Vol complet : la réservation est refusée et le statut reste non confirmé.
+   
+## Sortie attendue en fin d'exécution :
+
+=== BILAN : 8/8 TESTS REUSSIS ===
+Limites connues et évolutions possibles
+•	Les contrôles de validité des constructeurs affichent un message sans empêcher la création de l'objet. Le lancement d'une IllegalArgumentException constituerait une gestion d'erreurs plus rigoureuse.
+•	Le prix final n'est pas enregistré dans la Reservation.
+•	Il n'existe pas de fonctionnalité d'annulation avec libération de place.
+•	Le taux de réduction VIP n'est pas contrôlé (il devrait être compris entre 0 et 1).
+•	Les tests sont manuels ; une migration vers JUnit permettrait de les automatiser.
 
 
 
-## 5. Description des classes
 
-### 5.1. Classe `Passager`
 
-La classe `Passager` représente une personne qui souhaite voyager.
-
-**Attributs privés :**
-
--   `nom : String` --- nom du passager ;
--   `prenom : String` --- prénom du passager ;
--   `passeport : String` --- numéro de passeport.
-
-**Constructeur :**
-
--   `Passager(String nom, String prenom, String passeport)` ---
-    initialise les informations du passager.
-
-**Méthode :**
-
--   `afficherPassager() : void` --- affiche le prénom, le nom et le
-    numéro de passeport.
-
-### 5.2. Classe `Vol`
-
-La classe `Vol` représente un vol proposé aux passagers.
-
-**Attributs privés :**
-
--   `numeroVol : String` --- numéro du vol ;
--   `villeDepart : String` --- ville de départ ;
--   `villeArrivee : String` --- ville d'arrivée ;
--   `prixBase : double` --- prix de base du billet, en FCFA dans
-    l'exemple ;
--   `placesDisponibles : int` --- nombre de places encore disponibles.
-
-**Constructeur :**
-
--   `Vol(String numeroVol, String villeDepart, String villeArrivee, double prixBase, int placesDisponibles)`
-    --- initialise les informations du vol.
-
-**Méthodes :**
-
--   `reserverPlace() : boolean` --- retire une place si le nombre de
-    places disponibles est supérieur à zéro et renvoie `true`; sinon,
-    affiche un message et renvoie `false` ;
--   `afficherVol() : void` --- affiche les informations du vol ;
--   `getPrixBase() : double` --- renvoie le prix de base.
-
-### 5.3. Classe `Reservation`
-
-La classe `Reservation` représente une réservation pour un passager et
-un vol.
-
-**Attributs privés :**
-
--   `numeroBillet : String` --- numéro du billet ;
--   `vol : Vol` --- objet représentant le vol réservé ;
--   `passager : Passager` --- objet représentant le passager ;
--   `estConfirmee : boolean` --- indique si la réservation est
-    confirmée.
-
-**Constructeur :**
-
--   `Reservation(String numeroBillet, Vol vol, Passager passager)` ---
-    associe le billet au vol et au passager, puis initialise son état à
-    `false` (non confirmé).
-
-**Méthodes :**
-
--   `confirmerReservation() : void` --- demande au vol de réserver une
-    place et confirme la réservation si l'opération réussit ;
--   `afficherBillet() : void` --- affiche le numéro du billet, les
-    informations du passager, celles du vol et le statut de la
-    réservation.
-
-## 6. Déroulement de l'exemple
-
-La classe `Main` exécute le scénario de démonstration suivant :
-
-1.  Création du vol `AF720`, de Ouagadougou à Paris, au prix de 450 000
-    FCFA, avec deux places disponibles.
-2.  Création du passager Fatoumata Diabaté.
-3.  Création de la réservation `TKT-001`.
-4.  Tentative de confirmation de la réservation.
-5.  Affichage du billet et du nombre de places restantes.
-
-Si la réservation est confirmée, le nombre de places disponibles passe
-de deux à une.
-
-## 7. Exemple de résultat attendu
-
-``` text
---- État du vol ---
-Vol AF720 : Ouagadougou -> Paris | Prix : 450000.0 FCFA | Places restantes : 2
-
---- Réservation ---
-Réservation TKT-001 confirmée avec succès !
-
---- Détails du billet ---
-=== BILLET D'AVION ===
-Billet N° : TKT-001
-Passager : Fatoumata Diabaté (Passeport : B1234567)
-Vol AF720 : Ouagadougou -> Paris | Prix : 450000.0 FCFA | Places restantes : 1
-Statut : CONFIRMÉ
-======================
-
---- État du vol après réservation ---
-Vol AF720 : Ouagadougou -> Paris | Prix : 450000.0 FCFA | Places restantes : 1
-```
-
-La mise en forme exacte dépend des instructions d'affichage présentes
-dans la version de `Main.java` utilisée.
-
-## 8. Concepts de programmation utilisés
-
--   **Encapsulation :** les attributs sont déclarés `private` afin de
-    limiter leur accès direct depuis les autres classes.
--   **Constructeurs :** ils initialisent les objets au moment de leur
-    création.
--   **Objets :** le programme crée des instances de `Vol`, `Passager` et
-    `Reservation`.
--   **Collaboration entre objets :** `Reservation` possède des
-    références vers un `Vol` et un `Passager`, qu'elle utilise pour
-    réaliser ses opérations.
--   **Condition :** `reserverPlace()` vérifie la disponibilité d'une
-    place avant de la retirer.
-       ## 9. Choix de conception
-
-**Choix 1 --- Séparer le vol, le passager et la réservation.**\
-Chaque classe représente un concept distinct et possède une
-responsabilité identifiable. La réservation relie le passager au vol
-sans créer de relation directe entre `Vol` et `Passager`.
-
-**Choix 2 --- Garder les attributs privés.**\
-Les attributs sont déclarés `private`, ce qui applique le principe
-d'encapsulation. Dans cette première version, le prix de base peut être
-consulté avec `getPrixBase()` et la disponibilité est modifiée par
-`reserverPlace()`.
-
-## 10. Difficulté rencontrée et amélioration possible
-
-Une difficulté consiste à maintenir la cohérence entre le nombre de
-places disponibles et le statut de la réservation. La méthode
-`confirmerReservation()` s'appuie sur le résultat de `reserverPlace()`
-pour éviter de confirmer une réservation lorsque le vol est complet.
-
-Cette première version pourrait être renforcée en vérifiant les valeurs
-reçues par les constructeurs (par exemple, un prix négatif ou un nombre
-de places négatif) et en empêchant la confirmation répétée d'une même
-réservation. Ces améliorations pourront être réalisées dans une étape
-ultérieure du projet.
-
-## 11. Membres et contributions
+## Membres et contributions
 
   -----------------------------------------------------------------------
   Membre                              Contribution
   ----------------------------------- -----------------------------------
   **ZARE Mouhammad Ridwane Lamine**   Développement de la classe
-                                      `Passager` et réalisation du
+                                      `Main` et réalisation du
                                       diagramme UML.
 
-  **DIABATE Fatoumata**               Développement de la classe `Vol`.
+  **DIABATE Fatoumata**               Développement des classes `passager et passager vip`.
 
   **TRAORE HOUD Tariq Ramadan Togo**  Développement de la classe
-                                      `Reservation`.
+                                      `réservation et passager standard`.
 
   **OUALBEOGO Julie**                 Rédaction du `README.md` et
-                                      développement de la classe `Main`.
+                                      développement de la classe `Vol`.
   -----------------------------------------------------------------------
 
-## 12. Technologies utilisées
-
--   **Langage :** Java 17 ;
--   **Paradigme :** programmation orientée objet ;
--   **Outils possibles :** IntelliJ IDEA, Eclipse, NetBeans ou Visual
-    Studio Code ;
--   **Gestion du code :** Git et GitHub.
-
-## 13. Conclusion
-
-Ce projet propose une première simulation de réservation de billets
-d'avion. Il montre comment plusieurs classes Java peuvent collaborer :
-`Passager` représente le voyageur, `Vol` décrit le trajet et ses places
-disponibles, et `Reservation` relie le passager au vol et gère la
-confirmation. La classe `Main` permet de lancer un scénario simple et
-d'observer le résultat.
