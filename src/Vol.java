@@ -6,11 +6,36 @@ public class Vol {
     private int placesDisponibles;
 
     public Vol(String numeroVol, String villeDepart, String villeArrivee, double prixBase, int placesDisponibles) {
+        if (numeroVol==null|| numeroVol.equals("")){
+            System.out.println("Le numero de vol est obligatoire.");
+        }
+        if (prixBase<=0){
+            System.out.println("Le prix doit etre superieur à 0.");
+        }
+        if (placesDisponibles<0){
+            System.out.println("Le nombre de places disponibles ne peut pas etre négatif.");
+        }
         this.numeroVol = numeroVol;
         this.villeDepart = villeDepart;
         this.villeArrivee = villeArrivee;
         this.prixBase = prixBase;
         this.placesDisponibles = placesDisponibles;
+    }
+
+    public String getNumeroVol() {
+        return numeroVol;
+    }
+
+    public String getVilleDepart() {
+        return villeDepart;
+    }
+
+    public String getVilleArrivee() {
+        return villeArrivee;
+    }
+
+    public int getPlacesDisponibles() {
+        return placesDisponibles;
     }
 
     public boolean reserverPlace() {
@@ -31,3 +56,4 @@ public class Vol {
         return prixBase;
     }
 }
+
