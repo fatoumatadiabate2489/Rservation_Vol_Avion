@@ -28,4 +28,21 @@ public class Reservation {
         System.out.println("Statut : " + (estConfirmee ? "CONFIRMÉ" : "EN ATTENTE"));
         System.out.println("======================");
     }
+
+    // Getters
+    public String getNumeroBillet() {
+        return numeroBillet;
+    }
+
+    public Vol getVol() {
+        return vol;
+    }
+
+    public Passager getPassager() {
+        return passager;
+    }
+
+    public boolean isEstConfirmee() {
+        return estConfirmee;
+    }
 }
