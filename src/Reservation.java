@@ -12,11 +12,23 @@ public class Reservation {
     }
 
     public void confirmerReservation() {
-        if (vol.reserverPlace()) {
+        if (estConfirmee) {
+            System.out.println("Cette réservation est déjà confirmée.");
+        } else if (vol.reserver(1)) {
             this.estConfirmee = true;
             System.out.println("Réservation " + numeroBillet + " confirmée avec succès !");
         } else {
             System.out.println("Échec de la réservation.");
+        }
+    }
+
+    public void annulerReservation() {
+        if (estConfirmee) {
+            vol.annuler(1);
+            this.estConfirmee = false;
+            System.out.println("Réservation " + numeroBillet + " annulée.");
+        } else {
+            System.out.println("Cette réservation n'est pas confirmée, rien à annuler.");
         }
     }
 
@@ -25,6 +37,7 @@ public class Reservation {
         System.out.println("Billet N° : " + numeroBillet);
         passager.afficherPassager();
         vol.afficherVol();
+        System.out.println("Prix à payer : " + passager.calculerReduction(vol.getPrixBase()) + " FCFA");
         System.out.println("Statut : " + (estConfirmee ? "CONFIRMÉ" : "EN ATTENTE"));
         System.out.println("======================");
     }
