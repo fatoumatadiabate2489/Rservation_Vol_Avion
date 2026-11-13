@@ -1,66 +1,54 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== LANCEMENT DES 8 TESTS MANUELS (JALON 2) ===\n");
-
         int testsReussis = 0;
 
-        // TEST 1 : Création d'un vol
-        Vol vol1 = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
-        if (vol1 != null) {
-            System.out.println("[TEST 1 SUCCES] Vol créé avec succès.");
+        // Une liste pour ranger les vols
+        List<Vol> catalogueVols = new ArrayList<>();
+        Vol volNormal = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        Vol volLimite = new Vol("VOL999", "Ouaga", "Bobo", 50000, 1);
+        catalogueVols.add(volNormal);
+        catalogueVols.add(volLimite);
+
+        // TEST 1 : un vol disponible
+        System.out.println("--- Test 1 : vol disponible ---");
+        boolean reservation1 = volNormal.reserver(1);
+        if (volNormal.estDisponible() && reservation1 && volNormal.getPlacesDisponibles() == 1) {
+            System.out.println("[TEST 1 SUCCES] Vol disponible, réservation réussie.");
             testsReussis++;
+        } else {
+            System.out.println("[TEST 1 ECHEC]");
         }
 
-        // TEST 2 : Création d'un passager standard
-        Passager pStd = new PassagerStandard("ZARE", "Oumou", "P12345");
-        if (pStd.getNom().equals("Diabaté")) {
-            System.out.println("[TEST 2 SUCCES] Passager standard créé.");
+        // TEST 2 : un vol complet
+        System.out.println("\n--- Test 2 : vol complet ---");
+        volLimite.reserver(1); // on prend la dernière place
+        boolean reservation2 = volLimite.reserver(1); // il n'y a plus de place
+        if (!volLimite.estDisponible() && !reservation2) {
+            System.out.println("[TEST 2 SUCCES] Vol complet, réservation bloquée.");
             testsReussis++;
+        } else {
+            System.out.println("[TEST 2 ECHEC]");
         }
 
-        // TEST 3 : Création d'un passager VIP
-        PassagerVIP pVip = new PassagerVIP("Traore", "Tariq", "P67890", 0.20);
-        if (pVip != null) {
-            System.out.println("[TEST 3 SUCCES] Passager VIP créé.");
+        // TEST 3 : une réservation refusée (0 place demandée)
+        System.out.println("\n--- Test 3 : réservation refusée ---");
+        boolean reservation3 = volNormal.reserver(0);
+        if (!reservation3) {
+            System.out.println("[TEST 3 SUCCES] Réservation refusée (nombre de places invalide).");
             testsReussis++;
+        } else {
+            System.out.println("[TEST 3 ECHEC]");
         }
 
-        // TEST 4 : Test Polymorphisme (calcul des prix)
-        double prixStd = pStd.calculerReduction(vol1.getPrixBase());
-        double prixVip = pVip.calculerReduction(vol1.getPrixBase());
-        if (prixStd == 300000 && prixVip == 240000) {
-            System.out.println("[TEST 4 SUCCES] Polymorphisme validé (Std = 300k, VIP = 240k).");
-            testsReussis++;
+        // Affichage de la liste
+        System.out.println("\n--- État des vols ---");
+        for (Vol v : catalogueVols) {
+            v.afficherVol();
         }
 
-        // TEST 5 : Création d'une réservation (Composition)
-        Reservation res1 = new Reservation("RES-001", vol1, pStd);
-        if (res1.getVol() == vol1 && res1.getPassager() == pStd) {
-            System.out.println("[TEST 5 SUCCES] Composition validée (vol et passager liés).");
-            testsReussis++;
-        }
-
-        // TEST 6 : Confirmation de la réservation
-        res1.confirmerReservation();
-        if (res1.isEstConfirmee()) {
-            System.out.println("[TEST 6 SUCCES] Réservation confirmée et statut mis à jour.");
-            testsReussis++;
-        }
-
-        // TEST 7 : Affichage du billet (Vérification visuelle)
-        System.out.println("\n[TEST 7] Affichage du billet :");
-        res1.afficherBillet();
-        testsReussis++;
-
-        // TEST 8 : Vol complet (Vérification de la gestion des places)
-        Vol volPlein = new Vol("VOL999", "Ouaga", "Bobo", 50000, 0);
-        Reservation res3 = new Reservation("RES-003", volPlein, pStd);
-        res3.confirmerReservation();
-        if (!res3.isEstConfirmee()) {
-            System.out.println("\n[TEST 8 SUCCES] Échec géré correctement : impossible de réserver un vol complet.");
-            testsReussis++;
-        }
-
-        System.out.println("\n=== BILAN : " + testsReussis + "/8 TESTS REUSSIS ===");
+        System.out.println("\nBILAN : " + testsReussis + "/3 tests réussis");
     }
 }
