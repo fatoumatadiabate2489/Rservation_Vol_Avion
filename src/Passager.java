@@ -4,11 +4,14 @@ public abstract class Passager {
     protected String passeport;
 
     public Passager(String nom, String prenom, String passeport) {
-        if (nom==null|| nom.equals("")){
-            System.out.println("Le nom est vide!");
+        if (nom == null || nom.equals("")) {
+            System.out.println("Le nom est vide !");
         }
-        if (prenom==null|| prenom.equals("")){
-            System.out.println("Le prenom est vide!");
+        if (prenom == null || prenom.equals("")) {
+            System.out.println("Le prénom est vide !");
+        }
+        if (passeport == null || passeport.equals("")) {
+            System.out.println("Le passeport est vide !");
         }
         this.nom = nom;
         this.prenom = prenom;
@@ -16,20 +19,21 @@ public abstract class Passager {
     }
 
     public String getNom() {
-            return nom;
+        return nom;
     }
+
     public String getPrenom() {
-            return prenom;
+        return prenom;
     }
 
     public String getPasseport() {
-            return passeport;
+        return passeport;
     }
 
     public void afficherPassager() {
-        System.out.println("Passager:"+ prenom +" "+nom+"(Passeport:"+ passeport + ")");
+        System.out.println("Passager : " + prenom + " " + nom + " (Passeport : " + passeport + ")");
     }
 
-        // Le passager standard ne bénéficie d'aucune réduction (0%)
-        public abstract double calculerReduction(double prixBase);
+    // Calcule le prix que le passager doit payer
+    public abstract double calculerReduction(double prixBase);
 }
