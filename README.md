@@ -1,4 +1,4 @@
-# Réservation de vols — Mini-projet POO (Java 17)
+# Réservation de vols — Mini-projet POO 
 
 **Groupe :** Diabaté Fatoumata, Zare Lamine, Oualbeogo Julie, Traoré Tariq
 
@@ -28,70 +28,8 @@ Ce programme Java, en console, gère des vols, des passagers et des réservation
 
 ## 3. Diagramme UML
 
-```mermaid
-classDiagram
-    class Reservable {
-        <<interface>>
-        +reserver(nombrePlaces int) boolean
-        +annuler(nombrePlaces int) void
-        +estDisponible() boolean
-    }
-    class Vol {
-        -numeroVol : String
-        -villeDepart : String
-        -villeArrivee : String
-        -prixBase : double
-        -placesDisponibles : int
-        +getNumeroVol() String
-        +getVilleDepart() String
-        +getVilleArrivee() String
-        +getPlacesDisponibles() int
-        +getPrixBase() double
-        +estDisponible() boolean
-        +reserver(nombrePlaces int) boolean
-        +annuler(nombrePlaces int) void
-        +afficherVol() void
-    }
-    class Passager {
-        <<abstract>>
-        #nom : String
-        #prenom : String
-        #passeport : String
-        +getNom() String
-        +getPrenom() String
-        +getPasseport() String
-        +afficherPassager() void
-        +calculerReduction(prixBase double)* double
-    }
-    class PassagerStandard {
-        +calculerReduction(prixBase double) double
-    }
-    class PassagerVIP {
-        -reduction : double
-        +calculerReduction(prixBase double) double
-    }
-    class Reservation {
-        -numeroBillet : String
-        -vol : Vol
-        -passager : Passager
-        -estConfirmee : boolean
-        +confirmerReservation() void
-        +annulerReservation() void
-        +afficherBillet() void
-        +getNumeroBillet() String
-        +getVol() Vol
-        +getPassager() Passager
-        +isEstConfirmee() boolean
-    }
+<img width="1451" height="717" alt="Capture d&#39;écran 2026-11-12 203906" src="https://github.com/user-attachments/assets/0b2d99ec-f90a-4d92-b499-48d1358b9f3a" />
 
-    Reservable <|.. Vol
-    Passager <|-- PassagerStandard
-    Passager <|-- PassagerVIP
-    Reservation "*" --> "1" Vol
-    Reservation "*" --> "1" Passager
-```
-
-Une version image du diagramme est dans `docs/diagramme-uml.svg`.
 
 ## 4. Règles à respecter
 
@@ -103,16 +41,7 @@ Une version image du diagramme est dans `docs/diagramme-uml.svg`.
 - Une réservation confirmée prend une seule place, et elle ne peut pas être confirmée deux fois.
 - On ne peut annuler qu'une réservation déjà confirmée.
 
-## 5. Compiler et lancer
-
-Dans le dossier qui contient les fichiers `.java` :
-
-```
-javac *.java
-java Main
-```
-
-## 6. Tests
+## 5. Tests
 
 Le `Main` simule les 3 cas demandés pour l'interface `Reservable` :
 
@@ -123,7 +52,7 @@ Le `Main` simule les 3 cas demandés pour l'interface `Reservable` :
 À la fin, le programme affiche le bilan. Résultat attendu : `BILAN : 3/3 tests réussis`.
 Les vols sont rangés dans une `List<Vol>`, qu'on parcourt pour les afficher.
 
-## 7. Répartition du travail
+## 6. Répartition du travail
 
 | Membre | Code | Autre tâche |
 |---|---|---|
