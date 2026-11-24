@@ -4,14 +4,14 @@ public abstract class Passager {
     protected String passeport;
 
     public Passager(String nom, String prenom, String passeport) {
-        if (nom == null || nom.equals("")) {
-            System.out.println("Le nom est vide !");
+        if (nom == null || nom.trim().isEmpty()) {
+            throw new DonneeInvalideException("Le nom est vide !");
         }
-        if (prenom == null || prenom.equals("")) {
-            System.out.println("Le prénom est vide !");
+        if (prenom == null || prenom.trim().isEmpty()) {
+            throw new DonneeInvalideException("Le prénom est vide !");
         }
-        if (passeport == null || passeport.equals("")) {
-            System.out.println("Le passeport est vide !");
+        if (passeport == null || passeport.trim().isEmpty()) {
+            throw new DonneeInvalideException("Le passeport est vide !");
         }
         this.nom = nom;
         this.prenom = prenom;
