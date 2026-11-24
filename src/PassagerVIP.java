@@ -4,11 +4,9 @@ public class PassagerVIP extends Passager {
     public PassagerVIP(String nom, String prenom, String passeport, double reduction) {
         super(nom, prenom, passeport);
         if (reduction < 0 || reduction > 1) {
-            System.out.println("La réduction doit être entre 0 et 1. Réduction mise à 0.");
-            this.reduction = 0;
-        } else {
-            this.reduction = reduction;
+            throw new DonneeInvalideException("La réduction doit être entre 0 et 1 (ex : 0.20).");
         }
+        this.reduction = reduction;
     }
 
     @Override
