@@ -1,54 +1,53 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-        int testsReussis = 0;
+        ServiceReservation service = new ServiceReservation();
+        Vol vol1 = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        service.ajouterVol(vol1);
 
-        // Une liste pour ranger les vols
-        List<Vol> catalogueVols = new ArrayList<>();
-        Vol volNormal = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
-        Vol volLimite = new Vol("VOL999", "Ouaga", "Bobo", 50000, 1);
-        catalogueVols.add(volNormal);
-        catalogueVols.add(volLimite);
+        Passager pStd = new PassagerStandard("ZARE", "Oumou", "P12345");
+        Passager pVip = new PassagerVIP("Traore", "Tariq", "P67890", 0.20);
 
-        // TEST 1 : un vol disponible
-        System.out.println("--- Test 1 : vol disponible ---");
-        boolean reservation1 = volNormal.reserver(1);
-        if (volNormal.estDisponible() && reservation1 && volNormal.getPlacesDisponibles() == 1) {
-            System.out.println("[TEST 1 SUCCES] Vol disponible, réservation réussie.");
-            testsReussis++;
-        } else {
-            System.out.println("[TEST 1 ECHEC]");
+        // ---------- SCENARIO NORMAL ----------
+        System.out.println("=== SCENARIO : deux réservations réussies ===");
+        Reservation r1 = service.reserver("RES-001", "VOL101", pStd);
+        r1.afficherBillet();
+        Reservation r2 = service.reserver("RES-002", "VOL101", pVip);
+        r2.afficherBillet();
+        System.out.println("Le vol est-il encore disponible ? " + vol1.estDisponible());
+
+        // ---------- CAS D'ERREUR 1 : vol complet ----------
+        // try = on essaie ; catch = si cette erreur arrive, on affiche un message au lieu de planter
+        System.out.println("\n=== CAS D'ERREUR 1 : vol complet ===");
+        try {
+            service.reserver("RES-003", "VOL101", pStd);
+            System.out.println("PROBLEME : la réservation aurait dû être refusée.");
+        } catch (ConflitPlacesException e) {
+            System.out.println("Refusé : " + e.getMessage());
+        }
+        System.out.println("Réservations enregistrées : " + service.nombreReservations() + " (inchangé)");
+
+        // ---------- CAS D'ERREUR 2 : vol qui n'existe pas ----------
+        System.out.println("\n=== CAS D'ERREUR 2 : vol inconnu ===");
+        try {
+            service.reserver("RES-004", "VOL000", pStd);
+            System.out.println("PROBLEME : la réservation aurait dû être refusée.");
+        } catch (RessourceAbsenteException e) {
+            System.out.println("Refusé : " + e.getMessage());
         }
 
-        // TEST 2 : un vol complet
-        System.out.println("\n--- Test 2 : vol complet ---");
-        volLimite.reserver(1); // on prend la dernière place
-        boolean reservation2 = volLimite.reserver(1); // il n'y a plus de place
-        if (!volLimite.estDisponible() && !reservation2) {
-            System.out.println("[TEST 2 SUCCES] Vol complet, réservation bloquée.");
-            testsReussis++;
-        } else {
-            System.out.println("[TEST 2 ECHEC]");
+        // ---------- CAS D'ERREUR 3 : donnée invalide ----------
+        System.out.println("\n=== CAS D'ERREUR 3 : 0 place demandée ===");
+        try {
+            vol1.reserver(0);
+            System.out.println("PROBLEME : la demande aurait dû être refusée.");
+        } catch (DonneeInvalideException e) {
+            System.out.println("Refusé : " + e.getMessage());
         }
 
-        // TEST 3 : une réservation refusée (0 place demandée)
-        System.out.println("\n--- Test 3 : réservation refusée ---");
-        boolean reservation3 = volNormal.reserver(0);
-        if (!reservation3) {
-            System.out.println("[TEST 3 SUCCES] Réservation refusée (nombre de places invalide).");
-            testsReussis++;
-        } else {
-            System.out.println("[TEST 3 ECHEC]");
-        }
-
-        // Affichage de la liste
-        System.out.println("\n--- État des vols ---");
-        for (Vol v : catalogueVols) {
-            v.afficherVol();
-        }
-
-        System.out.println("\nBILAN : " + testsReussis + "/3 tests réussis");
+        // ---------- ANNULATION ----------
+        System.out.println("\n=== ANNULATION de RES-002 ===");
+        service.annuler("RES-002");
+        vol1.afficherVol();
+        System.out.println("Le vol est-il disponible ? " + vol1.estDisponible());
     }
 }
