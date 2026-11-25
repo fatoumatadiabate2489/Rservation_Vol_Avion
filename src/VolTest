@@ -1,0 +1,83 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class VolTest {
+
+    @Test
+    void volCreeAvecLesBonnesValeurs() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        assertEquals("VOL101", vol.getNumeroVol());
+        assertEquals("Ouagadougou", vol.getVilleDepart());
+        assertEquals("Paris", vol.getVilleArrivee());
+        assertEquals(300000, vol.getPrixBase(), 0.01);
+        assertEquals(2, vol.getPlacesDisponibles());
+        assertTrue(vol.estDisponible());
+    }
+
+    @Test
+    void reserverUnePlaceDiminueLesPlaces() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        vol.reserver(1);
+        assertEquals(1, vol.getPlacesDisponibles());
+    }
+
+    @Test
+    void reserverLaDernierePlaceRendLeVolIndisponible() {
+        Vol vol = new Vol("VOL999", "Ouaga", "Bobo", 50000, 1);
+        vol.reserver(1);
+        assertFalse(vol.estDisponible());
+        assertEquals(0, vol.getPlacesDisponibles());
+    }
+
+    // ----- Cas d'échec : l'exception est lancée ET l'état n'a pas changé -----
+
+    @Test
+    void reserverZeroPlaceLanceDonneeInvalideEtNeChangeRien() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        assertThrows(DonneeInvalideException.class, () -> vol.reserver(0));
+        assertEquals(2, vol.getPlacesDisponibles());
+    }
+
+    @Test
+    void reserverTropDePlacesLanceConflitEtNeChangeRien() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        assertThrows(ConflitPlacesException.class, () -> vol.reserver(5));
+        assertEquals(2, vol.getPlacesDisponibles());
+    }
+
+    @Test
+    void reserverSurUnVolCompletLanceConflitEtGardeZeroPlace() {
+        Vol vol = new Vol("VOL999", "Ouaga", "Bobo", 50000, 0);
+        assertThrows(ConflitPlacesException.class, () -> vol.reserver(1));
+        assertEquals(0, vol.getPlacesDisponibles());
+    }
+
+    @Test
+    void annulerUnNombreNegatifLanceDonneeInvalideEtNeChangeRien() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        assertThrows(DonneeInvalideException.class, () -> vol.annuler(-3));
+        assertEquals(2, vol.getPlacesDisponibles());
+    }
+
+    // ----- Cas normal d'annulation -----
+
+    @Test
+    void annulerRemetLesPlaces() {
+        Vol vol = new Vol("VOL101", "Ouagadougou", "Paris", 300000, 2);
+        vol.reserver(2);
+        vol.annuler(1);
+        assertEquals(1, vol.getPlacesDisponibles());
+    }
+
+    // ----- Invariants du constructeur -----
+
+    @Test
+    void volAvecPrixNegatifEstRefuse() {
+        assertThrows(DonneeInvalideException.class, () -> new Vol("VOL1", "A", "B", -100, 5));
+    }
+
+    @Test
+    void volSansNumeroEstRefuse() {
+        assertThrows(DonneeInvalideException.class, () -> new Vol("", "A", "B", 1000, 5));
+    }
+}
